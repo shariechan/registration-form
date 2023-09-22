@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "dev": "nodemon -e css,hbs,html,js -x 'npx tailwindcss build public/stylesheets/main.css -o public/stylesheets/output.css && npm start'"
+    "build:css": "npx tailwindcss build public/stylesheets/main.css -o public/stylesheets/output.css",
+    "dev": "nodemon -e css,hbs,html,js -x 'npm run build:css && npm start'"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
