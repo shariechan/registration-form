@@ -23,7 +23,7 @@ router.get('/test', function(req, res, next) {
 
   connection.connect()
 
-  connection.query('SELECT * from my Employees', (err, rows, fields) => {
+  connection.query('SELECT * from Employees', (err, rows, fields) => {
     if (err) throw err
 
     users = rows;
