@@ -10,7 +10,7 @@ router.get('/test-sql', function(req, res, next) {
   res.send(process.env.MYSQL_HOST);
 });
 
-router.post('/test', function(req, res, next) {
+router.get('/test', function(req, res, next) {
   let users = {};
   const mysql = require('mysql')
   const connection = mysql.createConnection({
