@@ -12,8 +12,13 @@ router.get('/test-sql', function(req, res, next) {
 });
 
 router.get('/test', async function(req, res, next) {
-  const employees = await employeeModel.getEmployees();
-  res.send(employees);
+  try {
+    const employees = await employeeModel.getEmployees();   
+
+    res.send(employees); 
+  } catch (error) {
+    res.status(500).send({error : error.message})
+  }
 });
 
 module.exports = router;

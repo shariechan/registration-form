@@ -34,11 +34,23 @@ module.exports.getEmployee = async (employeeId) => {
 
 module.exports.getEmployees = async () => {
     const queryStatement = 'SELECT * from `Employees`';
+
     await connection.connect();
-    const users = await connection.query(queryStatement, (err, rows, fields) => {
-        if (err) throw err
-        return rows; 
-      })
+
+    const users = await new Promise((resolve, reject)=> {
+        connection.query(queryStatement, (err, rows, fields) => {
+            if (err) {
+                reject(err.message)
+            
+            }
+            resolve(rows)
+        })
+    }).catch(err => {
+        
+        console.log('Error Here Catch');
+        throw err;
+    })
+    
     await connection.end()
 
     return users;
