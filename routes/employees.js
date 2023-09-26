@@ -19,7 +19,7 @@ router.get('/:id', async function(req, res, next) {
 
 router.post('/', async function(req, res, next) {
     const employee = await employeeModel.addEmployee(req.body);
-    res.send(employee, 201);
+    res.redirect('/employees');
 
 })
 module.exports = router;
