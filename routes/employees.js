@@ -14,7 +14,8 @@ router.get('/', async function(req, res, next) {
 
 router.get('/:id', async function(req, res, next) {
     const employee = await employeeModel.getEmployee(req.params.id);
-    res.send(employee, 200);
+    console.log("🚀 ~ file: employees.js:17 ~ router.get ~ employee:", employee);
+    res.status(200).send(employee, 200);
 })
 
 router.post('/', async function(req, res, next) {

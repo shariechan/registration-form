@@ -1,16 +1,21 @@
-const mysql = require('mysql');
-const connection = mysql.createConnection({
-    host: process.env.MYSQL_HOST,
-    port: process.env.MYSQL_PORT || 3306,
-    user: process.env.MYSQL_USER,
-    password: process.env.MYSQL_PASSWORD,
-    database: 'dbmaster'
-})
+const mysql = require('mysql2/promise');
+
+const mysqlCreateConnection = () => {
+    const connection = mysql.createConnection({
+        host: process.env.MYSQL_HOST,
+        port: process.env.MYSQL_PORT || 3306,
+        user: process.env.MYSQL_USER,
+        password: process.env.MYSQL_PASSWORD,
+        database: 'dbmaster'
+    })
+
+    return connection;
+}
 
 module.exports.addEmployee = async ({FirstName, LastName, Age}) => {
     const queryStatement = 'INSERT INTO `Employees` (`FirstName`, `LastName`, `Age`) VALUES (?, ?, ?)';
-    await connection.connect();
-    const user = await connection.query(queryStatement, [FirstName, LastName, Age], (err, rows, fields) => {
+    const connection = await mysqlCreateConnection();
+    const user = await connection.execute(queryStatement, [FirstName, LastName, Age], (err, rows, fields) => {
         if (err) throw err
         return rows[0];
       })
@@ -22,37 +27,23 @@ module.exports.addEmployee = async ({FirstName, LastName, Age}) => {
 
 module.exports.getEmployee = async (employeeId) => {
     const queryStatement = 'SELECT * from `Employees` where `id` = ?';
-    await connection.connect();
-    const user = await connection.query(queryStatement, [employeeId], (err, rows, fields) => {
-        if (err) throw err
-        return rows[0];
-      })
+    const connection = await mysqlCreateConnection();
+    console.log("🚀 ~ file: employee.js:31 ~ module.exports.getEmployee= ~ connection:", connection);
+    const [rows, fields] = await connection.execute(queryStatement, [employeeId]);
     await connection.end()
 
-    return user;
+    return rows;
 }
 
 module.exports.getEmployees = async () => {
     const queryStatement = 'SELECT * from `Employees`';
 
-    await connection.connect();
+    const connection = await mysqlCreateConnection();
 
-    const users = await new Promise((resolve, reject)=> {
-        connection.query(queryStatement, (err, rows, fields) => {
-            if (err) {
-                reject(err.message)
-            
-            }
-            resolve(rows)
-        })
-    }).catch(err => {
-        
-        console.log('Error Here Catch');
-        throw err;
-    })
+    const [rows, fields] = await connection.execute(queryStatement);
     
     await connection.end()
 
-    return users;
+    return rows;
 
 }
