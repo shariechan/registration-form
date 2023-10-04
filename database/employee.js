@@ -18,7 +18,7 @@ module.exports.addEmployee = async ({FirstName, LastName, Age}) => {
     const [rows, fields] = await connection.execute(queryStatement, [FirstName, LastName, Age]);
     await connection.end()
 
-    return user;
+    return rows;
 
 }
 
